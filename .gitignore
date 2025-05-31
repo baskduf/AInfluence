@@ -1,0 +1,56 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# 환경 파일
+.env
+*.env
+
+# 가상환경
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# VSCode, PyCharm 등 IDE 설정
+.vscode/
+.idea/
+*.swp
+
+# Django migrations
+**/migrations/
+!*/migrations/__init__.py
+
+# DB 파일 (sqlite 사용 시)
+*.sqlite3
+
+# 로그 및 캐시
+*.log
+*.pot
+*.mo
+*.pycache/
+*.cache/
+*.coverage
+coverage.xml
+*.pid
+
+# static, media (빌드 시 자동 생성되거나 외부 저장소에 보관되는 경우)
+staticfiles/
+media/
+static/
+
+# pytest, mypy, etc.
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# MacOS, Linux, Windows 특수 파일
+.DS_Store
+Thumbs.db
+ehthumbs.db
