@@ -73,10 +73,12 @@ def auto_generate_post(request):
         image_url = data.get("image_url", "")
 
         # 자동 포스팅용 유저
-        ai_user = User.objects.filter(username="root").first()
-        if not ai_user:
-            return JsonResponse({"error": "'aibot' 유저가 존재하지 않습니다."}, status=500)
 
+        ai_user = User.objects.filter(username="ai_influencer").first()
+        if not ai_user:
+            ai_user = User.objects.create_user(username="ai_influencer", password="ai_influencer")
+            # 필요한 추가 필드가 있으면 여기서 설정 후 저장
+            ai_user.save()
         # 이미지 저장은 URL이므로 별도 다운로드 및 저장 생략 (필요시 구현 가능)
         post = Post.objects.create(
             title=title,
