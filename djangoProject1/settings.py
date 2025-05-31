@@ -19,18 +19,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-import os
+from pathlib import Path
 
-# 프로젝트 최상단 경로 기준으로 api_key.txt 파일 경로 지정
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 try:
-    with open(os.path.join(BASE_DIR, "api_key.txt")) as f:
+    with open(BASE_DIR / "api_key.txt") as f:
         OPENAI_API_KEY = f.read().strip()
 except FileNotFoundError:
     OPENAI_API_KEY = None
     print("Warning: api_key.txt 파일이 없습니다. OPENAI_API_KEY를 설정하세요.")
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-7gl*wxd6#o$39_uj59@1t3r-wcn0=^_f6rueq892lq4ett+f)#"
