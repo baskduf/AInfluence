@@ -56,4 +56,7 @@ board/
 
 2. **의존성 설치**  
    ```bash
-   pip install -r requirements.txt
+   pip install Django
+   pip install requests
+   pip install openai
+   pip install apscheduler
