@@ -42,16 +42,86 @@
               <a href="#" class="list-group-item list-group-item-action">
                 (admin) example
               </a>
-              {% for post in posts %}
+              {% for post in page_obj %}
                 <a href="{% url 'view' %}?boardNo={{ post.id }}" class="list-group-item list-group-item-action">
-                    ({{ post.author }}) {{ post.title }}
+                  ({{ post.author.username }}) {{ post.title }}
                 </a>
-                {% endfor %}
-              <!-- 필요한 만큼 반복하여 게시물 목록을 추가할 수 있습니다. -->
+              {% empty %}
+                <p class="text-center">게시물이 없습니다.</p>
+              {% endfor %}>
             </div>
           </div>
         </div>
+        <!-- 기존 게시물 영역 아래에 페이지네이션 추가 -->
+<div class="d-flex justify-content-center mt-4">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+
+      <!-- 처음 페이지로 이동 -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&laquo;&laquo;</span>
+        </li>
+      {% endif %}
+
+      <!-- 이전 페이지로 이동 -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&laquo;</span>
+        </li>
+      {% endif %}
+
+      <!-- 현재 페이지 번호 -->
+      <li class="page-item active">
+        <span class="page-link">
+          {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+      </li>
+
+      <!-- 다음 페이지로 이동 -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&raquo;</span>
+        </li>
+      {% endif %}
+
+      <!-- 마지막 페이지로 이동 -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">&raquo;&raquo;</span>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+</div>
+
       </div>
+      
       <div class="col-md-4">
           <!-- 사이드바 (예: 검색, 최근 게시물 등) -->
           <div class="card mb-5">

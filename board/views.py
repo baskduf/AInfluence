@@ -76,7 +76,15 @@ def view_post(request):
 
     return render(request, 'login_error.html')
 
+from django.core.paginator import Paginator
+
 def index(request):
     form = AuthenticationForm()
-    posts = Post.objects.all()
-    return render(request, 'index.html', {'form': form, 'posts': posts})
+    posts_list = Post.objects.all().order_by('-created_at')  # 최신순 정렬 추천
+
+    paginator = Paginator(posts_list, 10)  # 한 페이지에 10개씩 보여주기
+    page_number = request.GET.get('page', 1)  # URL 파라미터 ?page=1 기본값 1
+    page_obj = paginator.get_page(page_number)  # 페이지 객체
+
+    
+    return render(request, 'index.html', {'form': form, 'page_obj': page_obj})

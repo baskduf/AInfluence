@@ -17,8 +17,8 @@ def start():
 
     from datetime import datetime
 
-    scheduler.add_job(call_auto_generate_post, 'interval', minutes=30, next_run_time=datetime.now())
-    #scheduler.add_job(call_auto_generate_post, 'interval', minutes=30)
+    #scheduler.add_job(call_auto_generate_post, 'interval', minutes=30, next_run_time=datetime.now())
+    scheduler.add_job(call_auto_generate_post, 'interval', minutes=30)
     scheduler.start()
 
     jobs = scheduler.get_jobs()
