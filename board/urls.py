@@ -20,6 +20,8 @@ from django.urls import include
 from django.views import View
 
 from board import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("rewrite_process", views.rewrite_process, name="rewrite_process"),
@@ -30,3 +32,6 @@ urlpatterns = [
     path("write", views.write, name="write"),
     path("", views.index, name="index"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

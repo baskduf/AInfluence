@@ -23,5 +23,7 @@ urlpatterns = [
     path("board/", include("board.urls")),
     path("member/", include("member.urls")),
     path("admin/", admin.site.urls),
-    path("ai/", include("ai_service.urls")),
+    path("ai_service/", include("ai_service.urls")),
+    
+    path("ai_post/", include("ai_post.urls")),
 ]

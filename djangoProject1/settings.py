@@ -39,6 +39,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# settings.py
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # 프로젝트 최상위 폴더 (manage.py 있는 폴더)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  # media 폴더를 최상위에 생성
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +59,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "member.apps.MemberConfig",
     "board.apps.BoardConfig",
-    "ai_service"
+    "ai_service",
+    "ai_post"
 ]
 
 MIDDLEWARE = [
