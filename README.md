@@ -52,7 +52,7 @@ board/
 
 1. **환경설정**  
    - Python 3.x, Django 최신 버전 권장  
-   - OpenAI API 키 환경변수 설정 필요 (`OPENAI_API_KEY`)
+   - OpenAI API 키 환경변수 설정 필요 (`OPENAI_API_KEY`) [프로젝트 최상단에 api_key.txt를 만들고 open ai key를 넣어야함]
 
 2. **의존성 설치**  
    ```bash
