@@ -1,105 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>게시판 레이아웃 예제</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons (optional) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ post.title }} | AI's Blog</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+
   <style>
-        .banner {
-            background-color: #f8f9fa;
-            padding: 10px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .login-form {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-        .posts {
-            margin-top: 20px;
-        }
-    </style>
+    body {
+      background-color: #fff;
+      color: #000;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .navbar-custom {
+      background-color: #000;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-custom a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      border: none;
+    }
+
+    .card-body {
+      position: relative;
+      min-height: 300px;
+      padding: 2rem;
+      padding-bottom: 6rem; /* 하단 버튼들 공간 확보 */
+    }
+
+    .btn-dark {
+      background-color: #000;
+      border: none;
+    }
+
+    .btn-dark:hover {
+      background-color: #333;
+    }
+
+    .btn-outline-dark:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 0.5rem;
+    }
+
+    .meta-box {
+      background-color: #f1f1f1;
+      padding: 12px 16px;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .content-box {
+      line-height: 1.8;
+      font-size: 1rem;
+      text-align: justify;
+    }
+
+    .post-actions-left {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+    }
+
+    .post-actions-right {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- 헤더 -->
+  <div class="navbar-custom text-center py-4">
+    <h1 class="fw-bold mb-0">
+      <a href="{% url 'index' %}">AI's Blog</a>
+    </h1>
+  </div>
+
   <div class="container mt-5">
     <div class="row">
+
+      <!-- 게시물 본문 -->
       <div class="col-md-8">
-        <!-- 게시물 목록 -->
-        <div class="card mb-3">
-          <div class="card-header">
-            <h1>{{ post.title }}</h1>
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h2 class="fw-bold mb-0">{{ post.title }}</h2>
           </div>
           <div class="card-body">
 
-            <!-- 여기에 게시물 목록이 동적으로 생성될 수 있습니다. -->
-              author : {{ post.author.username }}
-              <hr>
-              <br><br>
-              {% if post.image %}
-              <img src="{{ post.image.url }}" alt="{{ post.title }}" /><br>
-              {% endif %}
-              {{ post.content }}
-              <!-- 필요한 만큼 반복하여 게시물 목록을 추가할 수 있습니다. -->
+            <!-- 작성자 정보 -->
+            <div class="meta-box mb-3">
+              <div><strong>작성자:</strong> {{ post.author.username }}</div>
             </div>
+
+            <!-- 이미지 -->
+            {% if post.image %}
+              <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+
+            <!-- 본문 내용 -->
+            <div class="content-box">
+              {{ post.content|linebreaksbr }}
+            </div>
+
+            <!-- 왼쪽 하단: 뒤로가기 -->
+            <div class="post-actions-left">
+              <a href="{% url 'index' %}" class="btn btn-outline-dark">← Back</a>
+            </div>
+
+            <!-- 오른쪽 하단: 수정/삭제 -->
             {% if request.user.is_staff or request.user.username == post.author.username %}
-                <a href="{% url 'delete' %}?boardNo={{ post.id }}">
-                    <button class="btn btn-danger">Delete</button>
-                </a>
-                <a href="{% url 'rewrite' %}?boardNo={{ post.id }}">
-                    <button class="btn btn-success">Rewrite</button>
-                </a>
+              <div class="post-actions-right">
+                <a href="{% url 'delete' %}?boardNo={{ post.id }}" class="btn btn-outline-dark">Delete</a>
+                <a href="{% url 'rewrite' %}?boardNo={{ post.id }}" class="btn btn-dark">Rewrite</a>
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 로그인 사이드바 -->
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header bg-white fw-bold">LOGIN</div>
+          <div class="card-body">
+            {% if request.user.is_authenticated %}
+              <p><strong>{{ request.user.username }}</strong>님</p>
+              <hr>
+              <a href="{% url 'write' %}" class="btn btn-dark w-100 mb-2">Write</a>
+              <a href="{% url 'logout_controller' %}" class="btn btn-outline-dark w-100">Logout</a>
+            {% else %}
+              <form method="post" action="{% url 'login_controller' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-dark w-100 mb-2">Login</button>
+              </form>
+              <a href="{% url 'sign_up' %}" class="btn btn-outline-dark w-100">SignUp</a>
             {% endif %}
           </div>
         </div>
-        
-      <div class="col-md-4">
-          <!-- 사이드바 (예: 검색, 최근 게시물 등) -->
-          <div class="card mb-5">
-            <div class="card-header">
-              LOGIN
-            </div>
-            <div class="card-body d-flex flex-column">
-            <div>
-
-                <!-- 로그인 -->
-              {% if request.user.is_authenticated %}
-                  {{ request.user.username }}님
-                  <hr>
-                  <a href="{% url 'write' %}">
-                      <button type="submit" class="btn btn-success">Write</button></a>
-                  <a href="{% url 'logout_controller' %}">
-                      <button type="submit" class="btn btn-danger">Logout</button></a>
-              {% else %}
-              <div>
-                <form method="post" action="{% url 'login_controller' %}">
-                  {% csrf_token %}
-                  {{ form.as_p }}
-                  <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-              <a href="{% url 'sign_up' %}">
-                      <button type="submit" class="btn btn-success">SignUp</button></a>
-              </div>
-              {% endif %}
-              <!-- 로그인 종료 -->
-            </div>
-              <!-- 여기에 사이드바의 컨텐츠가 들어갈 수 있습니다. -->
-
-    </div>
-  </div>
-
       </div>
-</div>
+
     </div>
   </div>
 
-  <!-- Bootstrap JS (optional) -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

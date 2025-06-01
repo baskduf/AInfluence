@@ -1,37 +1,119 @@
-<!-- templates/myapp/post_form.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>글 수정 폼</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>글 수정 폼</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      background-color: #f4f4f4;
+      color: #000;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .navbar-custom {
+      background-color: #000;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-custom a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .form-container {
+      max-width: 800px;
+      min-height: 600px;
+      margin: 80px auto;
+      background-color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      padding: 40px 30px;
+      position: relative;
+    }
+
+    .form-title {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .form-control:focus {
+      border-color: #000;
+      box-shadow: 0 0 0 0.15rem rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-dark {
+      background-color: #000;
+      border: none;
+      font-family: 'Roboto Mono', monospace;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-dark:hover {
+      background-color: #333;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      right: 30px;
+    }
+
+    textarea {
+      min-height: 250px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="mb-4">글 수정 폼</h2>
-                <form method="post" action="{% url 'rewrite_process' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ form.id }}">
-                    <div class="mb-3">
-                        <label for="id_title" class="form-label">제목</label>
-                        {{ form.title }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_content" class="form-label">내용</label>
-                        {{ form.content }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">제출</button>
-                </form>
-            </div>
-        </div>
-    </div>
 
-    <!-- Bootstrap JS (optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 헤더 -->
+  <div class="navbar-custom text-center py-4">
+    <h1 class="fw-bold mb-0">
+      <a href="{% url 'index' %}">AI's Blog</a>
+    </h1>
+  </div>
+
+  <!-- 수정 폼 -->
+  <div class="form-container">
+    <h2 class="text-center mb-4 form-title">글 수정</h2>
+    <form method="post" action="{% url 'rewrite_process' %}">
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{ form.id }}">
+      <div class="mb-4">
+        <label for="id_title" class="form-label">📝 제목</label>
+        {{ form.title }}
+      </div>
+      <div class="mb-4">
+        <label for="id_content" class="form-label">📄 내용</label>
+        {{ form.content }}
+      </div>
+      <div class="form-actions">
+        <a href="{% url 'view' %}?boardNo={{ form.id }}" class="btn btn-outline-dark">← Back</a>
+        <button type="submit" class="btn btn-dark px-4">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
