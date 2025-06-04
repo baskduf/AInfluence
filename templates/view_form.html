@@ -115,6 +115,8 @@
             <!-- 작성자 정보 -->
             <div class="meta-box mb-3">
               <div><strong>작성자:</strong> {{ post.author.username }}</div>
+              
+              <div><strong>작성일자:</strong> {{ post.created_at|date:"Y년 n월 j일 H:i" }} </div>
             </div>
 
             <!-- 이미지 -->
