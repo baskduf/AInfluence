@@ -40,8 +40,7 @@
       border: none;
       border-bottom: 1px solid #e0e0e0;
       transition: background-color 0.2s;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
+      padding: 0.75rem 0.5rem;
     }
 
     .list-group-item:hover {
@@ -71,29 +70,44 @@
       color: #aaa;
     }
 
-    .post-title {
-      width: 85%;
+    .post-row {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .post-title, .post-time, .post-author {
+      padding: 0.5rem;
+      border-right: 1px solid #ddd;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
+    }
+
+    .post-title {
+      flex: 5;
+    }
+
+    .post-time {
+      flex: 2;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
     }
 
     .post-author {
-      width: 15%;
-      text-align: right;
+      flex: 2;
+      text-align: center;
       font-size: 0.9rem;
-      color: #888;
-      border-left: 1px solid #e0e0e0;
-      padding-left: 10px;
+      color: #666;
+      border-right: none;
     }
-    
-    .post-time {
-      width: 15%;
-      text-align: right;
-      font-size: 0.9rem;
-      color: #888;
-      border-left: 1px solid #e0e0e0;
-      padding-left: 3px;
+
+    .post-header {
+      background-color: #f1f1f1;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -113,23 +127,26 @@
       <div class="col-md-8">
         <div class="card mb-4">
           <!-- 목록 제목 -->
-          <div class="card-header bg-white fw-bold d-flex justify-content-between">
-            <span>게시물 목록</span>
-            <span class="text-muted">작성자</span>
-            
-            <span class="text-muted">작성날짜</span>
-          </div>
-          <div class="card-body">
+          <div class="card-header bg-white fw-bold">게시물 목록</div>
+          <div class="card-body p-0">
+
+            <!-- 헤더 -->
+            <div class="list-group-item post-row post-header">
+              <div class="post-title">제목</div>
+              <div class="post-time">작성일자</div>
+              <div class="post-author">작성자</div>
+            </div>
+
+            <!-- 게시물 목록 -->
             <div class="list-group">
               {% for post in page_obj %}
-                <a href="{% url 'view' %}?boardNo={{ post.id }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                <a href="{% url 'view' %}?boardNo={{ post.id }}" class="list-group-item post-row">
                   <div class="post-title">{{ post.title }}</div>
-                  <div class="post-author">{{ post.author.username }}</div>
-                  
                   <div class="post-time">{{ post.created_at|date:"Y년 n월 j일 H:i" }}</div>
+                  <div class="post-author">{{ post.author.username }}</div>
                 </a>
               {% empty %}
-                <p class="text-center">게시물이 없습니다.</p>
+                <div class="list-group-item text-center">게시물이 없습니다.</div>
               {% endfor %}
             </div>
           </div>
@@ -138,37 +155,23 @@
         <!-- 페이지네이션 -->
         <nav class="d-flex justify-content-center">
           <ul class="pagination">
-
             {% if page_obj.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?page=1">&laquo;&laquo;</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
-              </li>
+              <li class="page-item"><a class="page-link" href="?page=1">&laquo;&laquo;</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
             {% else %}
               <li class="page-item disabled"><span class="page-link">&laquo;&laquo;</span></li>
               <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
             {% endif %}
 
-            <li class="page-item active">
-              <span class="page-link">
-                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-              </span>
-            </li>
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
 
             {% if page_obj.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;&raquo;</a>
-              </li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;&raquo;</a></li>
             {% else %}
               <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
               <li class="page-item disabled"><span class="page-link">&raquo;&raquo;</span></li>
             {% endif %}
-
           </ul>
         </nav>
       </div>
@@ -194,6 +197,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
