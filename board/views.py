@@ -5,20 +5,24 @@ from .models import Post
 from .forms import WriteForm
 from django.shortcuts import redirect
 
+from django.shortcuts import render, redirect
+from .models import Post
+from .forms import WriteForm
+
 def rewrite(request):
     if 'boardNo' in request.GET:
         if request.user.is_authenticated:
-            id = request.GET['boardNo'];
-            post_id = Post.objects.filter(id=id).first()
-            if post_id is not None:
-                if post_id.author.username == request.user.username or request.user.is_superuser:
-                    form = WriteForm()
-                    form.id = post_id.id
-                    form.title = post_id.title
-                    form.content = post_id.content
-                    form.save()
-                    return render(request, 'rewrite_form.html', {'form': form})
+            post_id = request.GET['boardNo']
+            post = Post.objects.filter(id=post_id).first()
+
+            if post:
+                # 작성자 본인이거나 관리자(superuser)인 경우만 수정 가능
+                if post.author == request.user or request.user.is_superuser:
+                    form = WriteForm(instance=post)  # 여기서 instance 사용
+                    return render(request, 'rewrite_form.html', {'form': form, 'post_id': post.id})
+
     return render(request, 'login_error.html')
+
 
 def rewrite_process(request):
     if request.method == 'POST':
