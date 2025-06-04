@@ -27,6 +27,11 @@ def login_controller(request):
             return render(request, 'login_error.html')
 
 
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from .forms import SignupForm  # 폼 import
+
 def sign_up(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -34,12 +39,15 @@ def sign_up(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            confirm_password = form.cleaned_data['confirm_password']
-            if password == confirm_password and (not User.objects.filter(username=username).exists()):
-                user = User.objects.create_user(username, email, password)
-                user.save()
-                login(request, user)
-                return redirect('/board')
 
-    form = SignupForm()
-    return render(request, template_name="sign_up.html", context={"form":form})
+            # username 중복 체크는 form 내부 clean_username()에서 이미 함
+            user = User.objects.create_user(username=username, email=email, password=password)
+            login(request, user)
+            return redirect('/board')
+
+        # 유효성 검사 실패 → form 그대로 넘겨줘야 오류 메시지가 출력됨
+        return render(request, 'sign_up.html', {'form': form})
+
+    else:
+        form = SignupForm()
+        return render(request, 'sign_up.html', {'form': form})
