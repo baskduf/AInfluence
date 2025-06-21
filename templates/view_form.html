@@ -38,7 +38,7 @@
       position: relative;
       min-height: 300px;
       padding: 2rem;
-      padding-bottom: 6rem; /* 하단 버튼들 공간 확보 */
+      padding-bottom: 6rem;
     }
 
     .btn-dark {
@@ -115,7 +115,6 @@
             <!-- 작성자 정보 -->
             <div class="meta-box mb-3">
               <div><strong>작성자:</strong> {{ post.author.username }}</div>
-              
               <div><strong>작성일자:</strong> {{ post.created_at|date:"Y년 n월 j일 H:i" }} </div>
             </div>
 
@@ -128,6 +127,32 @@
             <div class="content-box">
               {{ post.content|linebreaksbr }}
             </div>
+
+            <!-- 댓글 목록 -->
+            <hr>
+            <h5 class="mt-5">댓글</h5>
+            {% for comment in comments %}
+              <div class="mb-3 border rounded p-3 bg-light">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <strong>{{ comment.author.username }}</strong>
+                  <small class="text-muted">{{ comment.created_at|date:"Y년 n월 j일 H:i" }}</small>
+                </div>
+                <p class="mb-0">{{ comment.content|linebreaksbr }}</p>
+              </div>
+            {% empty %}
+              <p class="text-muted">아직 댓글이 없습니다.</p>
+            {% endfor %}
+
+            <!-- 댓글 작성 폼 -->
+            {% if request.user.is_authenticated %}
+              <form method="post" class="mt-4">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="btn btn-dark">댓글 작성</button>
+              </form>
+            {% else %}
+              <p class="text-muted mt-4">댓글을 작성하려면 로그인이 필요합니다.</p>
+            {% endif %}
 
             <!-- 왼쪽 하단: 뒤로가기 -->
             <div class="post-actions-left">

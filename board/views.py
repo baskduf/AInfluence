@@ -4,11 +4,40 @@ from django.contrib.auth import login, logout, authenticate
 from .models import Post
 from .forms import WriteForm
 from django.shortcuts import redirect
+from .models import Post, Comment
+from .forms import CommentForm
 
 from django.shortcuts import render, redirect
 from .models import Post
 from .forms import WriteForm
 
+def view_post(request):
+    form = AuthenticationForm(request.user)
+    comment_form = CommentForm()
+
+    if 'boardNo' in request.GET:
+        post = Post.objects.filter(id=request.GET['boardNo']).first()
+        if post is None:
+            return render(request, 'login_error.html')
+
+        if request.method == 'POST' and request.user.is_authenticated:
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                return redirect(f'/view?boardNo={post.id}')
+
+        comments = post.comments.all().order_by('-created_at')
+        return render(request, 'view_form.html', {
+            'form': form,
+            'post': post,
+            'comment_form': comment_form,
+            'comments': comments,
+        })
+
+    return render(request, 'login_error.html')
 def rewrite(request):
     if 'boardNo' in request.GET:
         if request.user.is_authenticated:
@@ -68,15 +97,6 @@ def write_process(request):
                 post.author = request.user
                 post.save()
                 return redirect('/board')
-
-    return render(request, 'login_error.html')
-
-def view_post(request):
-    form = AuthenticationForm(request.user)
-    if 'boardNo' in request.GET:
-        post = Post.objects.filter(id=request.GET['boardNo']).first()
-        if post is not None:
-            return render(request, 'view_form.html', {'form':form, 'post': post})
 
     return render(request, 'login_error.html')
 
