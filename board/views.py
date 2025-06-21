@@ -27,6 +27,23 @@ def view_post(request):
                 comment.post = post
                 comment.author = request.user
                 comment.save()
+
+                # ✅ 댓글 수 확인
+                total_comments = post.comments.count()
+
+                if total_comments >= 3:
+                    # 중복 생성은 ai_service에서 처리
+                    import requests
+                    try:
+                        requests.post(
+                            "http://localhost:8000/ai_service/trigger_generate/",
+                            json={"post_id": post.id},
+                            timeout=3  # 응답 기다리지 않음
+                        )
+                        print("[board] GPT 트리거 요청 전송 완료")
+                    except Exception as e:
+                        print("[board] GPT 트리거 요청 실패:", str(e))
+
                 return redirect(f'/view?boardNo={post.id}')
 
         comments = post.comments.all().order_by('-created_at')

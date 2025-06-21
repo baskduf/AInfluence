@@ -9,3 +9,5 @@
 
 이미지:
 {해당 포스트에 어울리는 DALL·E 이미지 프롬프트 한 줄. 예: "A Korean woman in her 20s sitting in a pastel-themed brunch cafe with sunlight coming through the window"}
+
+주의: 두 개 이상 작성하지 마. 제목은 하나, 내용은 하나, 이미지도 하나만 써. **복수 응답 금지.**
