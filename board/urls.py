@@ -31,6 +31,7 @@ urlpatterns = [
     path("write_process", views.write_process, name="write_process"),
     path("write", views.write, name="write"),
     path("", views.index, name="index"),
+    path("delete_comment/<int:comment_id>/", views.delete_comment, name="delete_comment"),
 ]
 
 if settings.DEBUG:

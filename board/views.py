@@ -112,3 +112,10 @@ def index(request):
 
     
     return render(request, 'index.html', {'form': form, 'page_obj': page_obj})
+
+def delete_comment(request, comment_id):
+    comment = Comment.objects.filter(id=comment_id).first()
+    if comment and request.user == comment.author:
+        comment.delete()
+        return redirect(f'/view?boardNo={comment.post.id}')
+    return render(request, 'login_error.html')
